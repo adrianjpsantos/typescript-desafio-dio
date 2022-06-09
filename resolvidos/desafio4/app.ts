@@ -4,7 +4,6 @@ let username: string;
 let password: string;
 let sessionId: string;
 let listId: number;
-let lists: string[];
 
 const loginButton = document.getElementById(
   "login-button"
@@ -161,7 +160,10 @@ async function criarLista(nomeDaLista: string, descricao: string) {
       language: "pt-br",
     },
   });
-  console.log(result);
+  let response = JSON.parse(JSON.stringify(result));
+  let lista = new Lista(nomeDaLista, descricao, response.id);
+
+  (document.getElementById('listas') as HTMLElement).innerHTML += criarDomLista(lista);
 }
 
 async function adicionarFilmeNaLista(filmeId: number, listaId: number) {
@@ -183,10 +185,23 @@ async function pegarLista() {
   console.log(result);
 }
 
-interface ILista{
-  nome: string,
-  description:string,
-  id: string
+class Lista{
+  nome: string;
+  descricao: string;
+  id: number;
+  
+  constructor(nome: string,descricao:string,id:number) {
+    this.nome = nome;
+    this.descricao = descricao;
+    this.id = id;
+  }
 }
 
-interface IFilme {}
+function criarDomLista(lista:Lista) {
+  return `<div class="lista-item">
+  <input type="radio" value="${lista.id}">
+  <label for="${lista.id}">${lista.nome}</label>
+  <button onclick="apagarLista(this.value)" value="${lista.id}">X</button>
+</div>`;
+}
+

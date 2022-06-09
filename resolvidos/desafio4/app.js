@@ -14,7 +14,6 @@ let username;
 let password;
 let sessionId;
 let listId;
-let lists;
 const loginButton = document.getElementById("login-button");
 const searchButton = document.getElementById("search-button");
 const searchContainer = document.getElementById("search-container");
@@ -160,7 +159,9 @@ function criarLista(nomeDaLista, descricao) {
                 language: "pt-br",
             },
         });
-        console.log(result);
+        let response = JSON.parse(JSON.stringify(result));
+        let lista = new Lista(nomeDaLista, descricao, response.id);
+        document.getElementById('listas').innerHTML += criarDomLista(lista);
     });
 }
 function adicionarFilmeNaLista(filmeId, listaId) {
@@ -183,4 +184,18 @@ function pegarLista() {
         });
         console.log(result);
     });
+}
+class Lista {
+    constructor(nome, descricao, id) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.id = id;
+    }
+}
+function criarDomLista(lista) {
+    return `<div class="lista-item">
+  <input type="radio" value="${lista.id}">
+  <label for="${lista.id}">${lista.nome}</label>
+  <button onclick="apagarLista(this.value)" value="${lista.id}">X</button>
+</div>`;
 }
