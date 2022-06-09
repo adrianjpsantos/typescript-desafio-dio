@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio 4</title>
+</head>
+
+<body>
+    <div class="container">
+        <section id="login-box"
+            style="display: flex; width: 300px; height: 100px; justify-content: space-between; flex-direction: column;">
+            <input id="login" placeholder="Login" onchange="preencherLogin()">
+            <input id="senha" placeholder="Senha" type="password" onchange="preencherSenha()">
+            <input id="api-key" placeholder="Api Key" onchange="preencherApi()">
+            <button id="login-button" disabled>Login</button>
+        </section>
+        <section>
+            <span><span id="username">Username</span></span>
+            <div id="search-container">
+                <input id="search" placeholder="Escreva...">
+                <button id="search-button">Pesquisar Filme</button>
+            </div>
+        </section>
+        <section>
+            <h5>Listas</h5>
+            <input id="lista-nome" placeholder="Nome da lista" type="text">
+            <input type="text" placeholder="Descrição" id="list-descricao">
+            <button id="criar-lista">Criar Lista</button>
+            <div class="lista-item">
+                <input type="radio" value="idlista">
+                <label for="idLista">Nome da lista</label>
+                <button id="apagar-lista">X</button>
+            </div>
+        </section>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
