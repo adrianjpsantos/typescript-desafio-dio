@@ -155,11 +155,10 @@ async function criarSessao() {
 }
 
 async function criarLista() {
-  let nomeDaLista = (document.getElementById("lista-nome") as HTMLInputElement)
-    .value;
-  let descricao = (
-    document.getElementById("lista-descricao") as HTMLInputElement
-  ).value;
+  let nomeDaListaElement = document.getElementById("lista-nome") as HTMLInputElement;
+  let nomeDaLista = nomeDaListaElement.value;
+  let descricaoElement = document.getElementById("lista-descricao") as HTMLInputElement;
+  let descricao = descricaoElement.value;
 
   let result = await HttpClient.get({
     url: `https://api.themoviedb.org/3/list?api_key=${apiKey}&session_id=${sessionId}`,
@@ -172,9 +171,8 @@ async function criarLista() {
   });
   let response = JSON.parse(JSON.stringify(result));
   let lista = new Lista(nomeDaLista, descricao, response.id);
-
-  (document.getElementById("listas") as HTMLElement).innerHTML +=
-    criarDomLista(lista);
+  let listaContainer = document.getElementById("lista-result") as HTMLElement;
+  listaContainer.innerHTML += criarDomLista(lista);
 }
 
 async function adicionarFilmeNaLista(filmeId: number, listaId: number) {
@@ -241,10 +239,16 @@ function criarUrlImage(path: string) {
 }
 
 function esconderLoginEMostrarUsuario() {
-  let loginBox = document.getElementById("login-box") as HTMLElement;
-  let childrens = loginBox.childNodes;
-  for (let i = 0; i < childrens.length; i++) {
-    let element = childrens[i] as HTMLElement;
-    element.classList.toggle("disable");
-  }
+  let inputUserName = document.getElementById('login') as HTMLElement;
+  let inputPassword = document.getElementById('senha') as HTMLElement;
+  let inputApiKey = document.getElementById('api-key') as HTMLElement;
+  let textUserName = document.getElementById('username') as HTMLParagraphElement;
+
+  inputPassword.classList.toggle('disable');
+  inputUserName.classList.toggle('disable');
+  inputApiKey.classList.toggle('disable');
+  loginButton.classList.toggle('disable');
+  textUserName.classList.toggle('disable');
+
+  textUserName.textContent = username;
 }

@@ -153,9 +153,10 @@ function criarSessao() {
 }
 function criarLista() {
     return __awaiter(this, void 0, void 0, function* () {
-        let nomeDaLista = document.getElementById("lista-nome")
-            .value;
-        let descricao = document.getElementById("lista-descricao").value;
+        let nomeDaListaElement = document.getElementById("lista-nome");
+        let nomeDaLista = nomeDaListaElement.value;
+        let descricaoElement = document.getElementById("lista-descricao");
+        let descricao = descricaoElement.value;
         let result = yield HttpClient.get({
             url: `https://api.themoviedb.org/3/list?api_key=${apiKey}&session_id=${sessionId}`,
             method: "POST",
@@ -167,8 +168,8 @@ function criarLista() {
         });
         let response = JSON.parse(JSON.stringify(result));
         let lista = new Lista(nomeDaLista, descricao, response.id);
-        document.getElementById("listas").innerHTML +=
-            criarDomLista(lista);
+        let listaContainer = document.getElementById("lista-result");
+        listaContainer.innerHTML += criarDomLista(lista);
     });
 }
 function adicionarFilmeNaLista(filmeId, listaId) {
@@ -224,10 +225,14 @@ function criarUrlImage(path) {
     return `https://image.tmdb.org/t/p/w500/${path}`;
 }
 function esconderLoginEMostrarUsuario() {
-    let loginBox = document.getElementById("login-box");
-    let childrens = loginBox.childNodes;
-    for (let i = 0; i < childrens.length; i++) {
-        let element = childrens[i];
-        element.classList.toggle("disable");
-    }
+    let inputUserName = document.getElementById('login');
+    let inputPassword = document.getElementById('senha');
+    let inputApiKey = document.getElementById('api-key');
+    let textUserName = document.getElementById('username');
+    inputPassword.classList.toggle('disable');
+    inputUserName.classList.toggle('disable');
+    inputApiKey.classList.toggle('disable');
+    loginButton.classList.toggle('disable');
+    textUserName.classList.toggle('disable');
+    textUserName.textContent = username;
 }

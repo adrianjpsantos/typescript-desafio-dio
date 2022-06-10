@@ -12,9 +12,9 @@
 <body>
     <div class="container">
         <section id="login-box">
-            <input id="login" placeholder="Login" onchange="preencherLogin()">
-            <input id="senha" placeholder="Senha" type="password" onchange="preencherSenha()">
-            <input id="api-key" placeholder="Api Key" onchange="preencherApi()">
+            <input class="input" id="login" placeholder="Login" onchange="preencherLogin()">
+            <input class="input" id="senha" placeholder="Senha" type="password" onchange="preencherSenha()">
+            <input class="input" id="api-key" placeholder="Api Key" onchange="preencherApi()">
             <button id="login-button" class="button" disabled>Login</button>
             <span id="username" class="disable">Username</span>
         </section>
@@ -28,12 +28,16 @@
             </section>
         </section>
         <section id="listas">
-            <h5>Listas</h5>
-            <input id="lista-nome" placeholder="Nome da lista" type="text">
-            <input type="text" placeholder="Descrição" id="list-descricao">
-            <button id="criar-lista">Criar Lista</button>
+            <div class="listas-container">
+                <h5>Crie uma lista de filmes</h5>
+                <input class="input" id="lista-nome" placeholder="Nome da lista" type="text">
+                <input class="input" type="text" placeholder="Descrição" id="lista-descricao">
+                <button class="button" id="criar-lista">Criar Lista</button>
+            </div>
+            <div id="lista-result">
+            </div>
         </section>
-        
+
     </div>
     <script src="app.js"></script>
 </body>
