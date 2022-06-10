@@ -17,6 +17,7 @@ let listId;
 const loginButton = document.getElementById("login-button");
 const searchButton = document.getElementById("search-button");
 const searchContainer = document.getElementById("search-container");
+const criarButton = document.getElementById("criar-lista");
 loginButton === null || loginButton === void 0 ? void 0 : loginButton.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
     yield criarRequestToken();
     yield logar();
@@ -39,6 +40,9 @@ searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEven
     }
     console.log(listaDeFilmes);
     searchContainer.appendChild(ul);
+}));
+criarButton === null || criarButton === void 0 ? void 0 : criarButton.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
+    yield criarLista();
 }));
 function preencherSenha() {
     let input = document.getElementById("senha");
@@ -148,8 +152,11 @@ function criarSessao() {
         sessionId = response.session_id;
     });
 }
-function criarLista(nomeDaLista, descricao) {
+function criarLista() {
     return __awaiter(this, void 0, void 0, function* () {
+        let nomeDaLista = document.getElementById("lista-nome")
+            .value;
+        let descricao = document.getElementById("lista-descricao").value;
         let result = yield HttpClient.get({
             url: `https://api.themoviedb.org/3/list?api_key=${apiKey}&session_id=${sessionId}`,
             method: "POST",
@@ -161,7 +168,8 @@ function criarLista(nomeDaLista, descricao) {
         });
         let response = JSON.parse(JSON.stringify(result));
         let lista = new Lista(nomeDaLista, descricao, response.id);
-        document.getElementById('listas').innerHTML += criarDomLista(lista);
+        document.getElementById("listas").innerHTML +=
+            criarDomLista(lista);
     });
 }
 function adicionarFilmeNaLista(filmeId, listaId) {

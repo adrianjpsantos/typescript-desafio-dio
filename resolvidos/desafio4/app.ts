@@ -14,6 +14,7 @@ const searchButton = document.getElementById(
 const searchContainer = document.getElementById(
   "search-container"
 ) as HTMLDivElement;
+const criarButton = document.getElementById("criar-lista") as HTMLButtonElement;
 
 loginButton?.addEventListener("click", async () => {
   await criarRequestToken();
@@ -29,7 +30,8 @@ searchButton?.addEventListener("click", async () => {
   let search = document.getElementById("search") as HTMLInputElement;
   let query = search.value;
   let listaDeFilmes = await procurarFilme(query);
-  let ul = document.createElement("ul");
+  let listaSection = document.getElementById('listas') as HTMLBodyElement;
+  let ul = listaSection.("ul");
   ul.id = "lista";
   for (const item of listaDeFilmes.results) {
     let li = document.createElement("li");
@@ -38,6 +40,10 @@ searchButton?.addEventListener("click", async () => {
   }
   console.log(listaDeFilmes);
   searchContainer.appendChild(ul);
+});
+
+criarButton?.addEventListener("click", async () => {
+  await criarLista();
 });
 
 function preencherSenha() {
@@ -150,7 +156,13 @@ async function criarSessao() {
   sessionId = response.session_id;
 }
 
-async function criarLista(nomeDaLista: string, descricao: string) {
+async function criarLista() {
+  let nomeDaLista = (document.getElementById("lista-nome") as HTMLInputElement)
+    .value;
+  let descricao = (
+    document.getElementById("lista-descricao") as HTMLInputElement
+  ).value;
+
   let result = await HttpClient.get({
     url: `https://api.themoviedb.org/3/list?api_key=${apiKey}&session_id=${sessionId}`,
     method: "POST",
@@ -163,7 +175,8 @@ async function criarLista(nomeDaLista: string, descricao: string) {
   let response = JSON.parse(JSON.stringify(result));
   let lista = new Lista(nomeDaLista, descricao, response.id);
 
-  (document.getElementById('listas') as HTMLElement).innerHTML += criarDomLista(lista);
+  (document.getElementById("listas") as HTMLElement).innerHTML +=
+    criarDomLista(lista);
 }
 
 async function adicionarFilmeNaLista(filmeId: number, listaId: number) {
@@ -185,23 +198,22 @@ async function pegarLista() {
   console.log(result);
 }
 
-class Lista{
+class Lista {
   nome: string;
   descricao: string;
   id: number;
-  
-  constructor(nome: string,descricao:string,id:number) {
+
+  constructor(nome: string, descricao: string, id: number) {
     this.nome = nome;
     this.descricao = descricao;
     this.id = id;
   }
 }
 
-function criarDomLista(lista:Lista) {
+function criarDomLista(lista: Lista) {
   return `<div class="lista-item">
   <input type="radio" value="${lista.id}">
   <label for="${lista.id}">${lista.nome}</label>
   <button onclick="apagarLista(this.value)" value="${lista.id}">X</button>
 </div>`;
 }
-
