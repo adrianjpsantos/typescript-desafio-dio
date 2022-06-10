@@ -20,6 +20,7 @@ loginButton?.addEventListener("click", async () => {
   await criarRequestToken();
   await logar();
   await criarSessao();
+  esconderLoginEMostrarUsuario();
 });
 
 searchButton?.addEventListener("click", async () => {
@@ -30,16 +31,13 @@ searchButton?.addEventListener("click", async () => {
   let search = document.getElementById("search") as HTMLInputElement;
   let query = search.value;
   let listaDeFilmes = await procurarFilme(query);
-  let listaSection = document.getElementById('listas') as HTMLBodyElement;
-  let ul = listaSection.("ul");
-  ul.id = "lista";
+  let listaSection = document.getElementById("search-result") as HTMLElement;
+  listaSection.innerHTML = "";
   for (const item of listaDeFilmes.results) {
-    let li = document.createElement("li");
-    li.appendChild(document.createTextNode(item.title));
-    ul.appendChild(li);
+    let filme = new Filme(item.title, item.description, item.poster_path, item.id);
+    listaSection.innerHTML += criarDomFilme(item);
   }
   console.log(listaDeFilmes);
-  searchContainer.appendChild(ul);
 });
 
 criarButton?.addEventListener("click", async () => {
@@ -210,10 +208,43 @@ class Lista {
   }
 }
 
+class Filme {
+  title: string;
+  description: string;
+  poster_path: string;
+  id: number;
+  constructor(title: string, description: string, poster_path: string, id: number) {
+    this.title = title;
+    this.description = description;
+    this.poster_path = poster_path;
+    this.id = id;
+  }
+}
+
 function criarDomLista(lista: Lista) {
   return `<div class="lista-item">
   <input type="radio" value="${lista.id}">
   <label for="${lista.id}">${lista.nome}</label>
   <button onclick="apagarLista(this.value)" value="${lista.id}">X</button>
 </div>`;
+}
+
+function criarDomFilme(filme: Filme) {
+  return `<article class="filme-box">
+  <img src="${criarUrlImage(filme.poster_path)}">
+  <p>${filme.title}</p>
+  </article>`;
+}
+
+function criarUrlImage(path: string) {
+  return `https://image.tmdb.org/t/p/w500/${path}`;
+}
+
+function esconderLoginEMostrarUsuario() {
+  let loginBox = document.getElementById("login-box") as HTMLElement;
+  let childrens = loginBox.childNodes;
+  for (let i = 0; i < childrens.length; i++) {
+    let element = childrens[i] as HTMLElement;
+    element.classList.toggle("disable");
+  }
 }

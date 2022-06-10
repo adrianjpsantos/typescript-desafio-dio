@@ -22,6 +22,7 @@ loginButton === null || loginButton === void 0 ? void 0 : loginButton.addEventLi
     yield criarRequestToken();
     yield logar();
     yield criarSessao();
+    esconderLoginEMostrarUsuario();
 }));
 searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
     let lista = document.getElementById("lista");
@@ -31,15 +32,13 @@ searchButton === null || searchButton === void 0 ? void 0 : searchButton.addEven
     let search = document.getElementById("search");
     let query = search.value;
     let listaDeFilmes = yield procurarFilme(query);
-    let ul = document.createElement("ul");
-    ul.id = "lista";
+    let listaSection = document.getElementById("search-result");
+    listaSection.innerHTML = "";
     for (const item of listaDeFilmes.results) {
-        let li = document.createElement("li");
-        li.appendChild(document.createTextNode(item.title));
-        ul.appendChild(li);
+        let filme = new Filme(item.title, item.description, item.poster_path, item.id);
+        listaSection.innerHTML += criarDomFilme(item);
     }
     console.log(listaDeFilmes);
-    searchContainer.appendChild(ul);
 }));
 criarButton === null || criarButton === void 0 ? void 0 : criarButton.addEventListener("click", () => __awaiter(void 0, void 0, void 0, function* () {
     yield criarLista();
@@ -200,10 +199,35 @@ class Lista {
         this.id = id;
     }
 }
+class Filme {
+    constructor(title, description, poster_path, id) {
+        this.title = title;
+        this.description = description;
+        this.poster_path = poster_path;
+        this.id = id;
+    }
+}
 function criarDomLista(lista) {
     return `<div class="lista-item">
   <input type="radio" value="${lista.id}">
   <label for="${lista.id}">${lista.nome}</label>
   <button onclick="apagarLista(this.value)" value="${lista.id}">X</button>
 </div>`;
+}
+function criarDomFilme(filme) {
+    return `<article class="filme-box">
+  <img src="${criarUrlImage(filme.poster_path)}">
+  <p>${filme.title}</p>
+  </article>`;
+}
+function criarUrlImage(path) {
+    return `https://image.tmdb.org/t/p/w500/${path}`;
+}
+function esconderLoginEMostrarUsuario() {
+    let loginBox = document.getElementById("login-box");
+    let childrens = loginBox.childNodes;
+    for (let i = 0; i < childrens.length; i++) {
+        let element = childrens[i];
+        element.classList.toggle("disable");
+    }
 }
